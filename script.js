@@ -193,6 +193,22 @@ document
 
     startMusic();
 
+    const letter =
+      document.getElementById("surpriseLetter");
+
+    letter.classList.add("show");
+
+    setTimeout(() => {
+      letter.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }, 200);
+
+  }); {
+
+    startMusic();
+
     document
       .getElementById("story")
       .scrollIntoView({
