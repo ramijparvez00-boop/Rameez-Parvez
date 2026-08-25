@@ -1,453 +1,592 @@
 /* =========================
-   PHOTOS
+PHOTOS / SLIDESHOW
 ========================= */
 
 const photoFiles = [
-  "photo1.jpg",
-  "photo2.jpg",
-  "photo3.jpg",
-  "photo4.jpg",
-  "photo5.jpg",
-  "photo6.jpg",
-  "photo7.jpg"
+"photo1.jpg",
+"photo2.jpg",
+"photo3.jpg",
+"photo4.jpg",
+"photo5.jpg",
+"photo6.jpg",
+"photo7.jpg"
 ];
 
 const slideImage = document.getElementById("slideImage");
 const slideCounter = document.getElementById("slideCounter");
 const dots = document.getElementById("dots");
+const nextBtn = document.getElementById("nextBtn");
+const prevBtn = document.getElementById("prevBtn");
+const slideFrame = document.getElementById("slideFrame");
 
 let currentSlide = 0;
 let slideshowTimer;
 
+/* Create slideshow dots */
 
-/* Create dots */
-
+if (dots) {
 photoFiles.forEach((_, index) => {
 
-  const dot = document.createElement("div");
+```
+const dot = document.createElement("div");
 
-  dot.className = "dot";
+dot.className = "dot";
 
-  dot.addEventListener("click", () => {
-    showSlide(index);
-    restartSlideshow();
-  });
-
-  dots.appendChild(dot);
-
+dot.addEventListener("click", () => {
+  showSlide(index);
+  restartSlideshow();
 });
 
+dots.appendChild(dot);
+```
+
+});
+}
+
+/* Show slide */
 
 function showSlide(index) {
 
-  currentSlide =
-    (index + photoFiles.length) % photoFiles.length;
+if (!slideImage) return;
 
-  slideImage.classList.remove("show");
+currentSlide =
+(index + photoFiles.length) % photoFiles.length;
 
-  setTimeout(() => {
+slideImage.classList.remove("show");
 
-    slideImage.src =
-      `assets/${photoFiles[currentSlide]}`;
+setTimeout(() => {
 
-    slideImage.classList.add("show");
+```
+slideImage.src =
+  `assets/${photoFiles[currentSlide]}`;
 
-    slideCounter.textContent =
-      `${currentSlide + 1} / ${photoFiles.length}`;
+slideImage.onload = () => {
+  slideImage.classList.add("show");
+};
 
-  }, 250);
+if (slideCounter) {
+  slideCounter.textContent =
+    `${currentSlide + 1} / ${photoFiles.length}`;
+}
+```
 
+}, 250);
 
-  document.querySelectorAll(".dot").forEach(
-    (dot, i) => {
-      dot.classList.toggle(
-        "active",
-        i === currentSlide
-      );
-    }
-  );
+if (dots) {
+
+```
+document.querySelectorAll(".dot").forEach(
+  (dot, i) => {
+
+    dot.classList.toggle(
+      "active",
+      i === currentSlide
+    );
+
+  }
+);
+```
+
 }
 
+}
 
-/* Next */
+/* Next slide */
 
 function nextSlide() {
-
-  showSlide(currentSlide + 1);
-
+showSlide(currentSlide + 1);
 }
 
-
-/* Previous */
+/* Previous slide */
 
 function previousSlide() {
+showSlide(currentSlide - 1);
+}
 
-  showSlide(currentSlide - 1);
+/* Arrow buttons */
+
+if (nextBtn) {
+
+nextBtn.addEventListener("click", () => {
+
+```
+nextSlide();
+restartSlideshow();
+```
+
+});
 
 }
 
+if (prevBtn) {
 
-document
-  .getElementById("nextBtn")
-  .addEventListener("click", () => {
+prevBtn.addEventListener("click", () => {
 
-    nextSlide();
-    restartSlideshow();
+```
+previousSlide();
+restartSlideshow();
+```
 
-  });
+});
 
+}
 
-document
-  .getElementById("prevBtn")
-  .addEventListener("click", () => {
-
-    previousSlide();
-    restartSlideshow();
-
-  });
-
-
-/* Auto slideshow */
+/* Automatic slideshow */
 
 function startSlideshow() {
 
-  slideshowTimer = setInterval(() => {
+clearInterval(slideshowTimer);
 
-    nextSlide();
+slideshowTimer = setInterval(() => {
 
-  }, 4500);
+```
+nextSlide();
+```
+
+}, 4500);
 
 }
-
 
 function restartSlideshow() {
 
-  clearInterval(slideshowTimer);
+clearInterval(slideshowTimer);
 
-  startSlideshow();
+startSlideshow();
 
 }
 
-
-/* Start */
+/* Start slideshow */
 
 showSlide(0);
 startSlideshow();
 
-
 /* =========================
-   MUSIC
+MUSIC
 ========================= */
 
 const music =
-  document.getElementById("music");
+document.getElementById("music");
 
 const musicBtn =
-  document.getElementById("musicBtn");
-
-let musicStarted = false;
+document.getElementById("musicBtn");
 
 async function startMusic() {
-  try {
-    music.currentTime = 0;
-    music.volume = 1;
 
-    await music.play();
-
-    musicStarted = true;
-    musicBtn.textContent = "❚❚";
-  } catch (error) {
-    console.error("Music error:", error);
-    alert("Music play nahi ho pa raha. Please check song.mp3 file.");
-  }
+if (!music) {
+console.error("Music element not found.");
+return;
 }
 
-function toggleMusic() {
+try {
 
-  if (music.paused) {
+```
+music.volume = 1;
 
-    startMusic();
+await music.play();
 
-  } else {
-
-    music.pause();
-
-    musicBtn.textContent = "♪";
-
-  }
-
+if (musicBtn) {
+  musicBtn.textContent = "❚❚";
 }
+```
 
+} catch (error) {
 
-musicBtn.addEventListener(
-  "click",
-  toggleMusic
+```
+console.log(
+  "Music needs user interaction:",
+  error
 );
+```
 
+}
 
-/* Open surprise */
+}
 
-document
-  .getElementById("surpriseBtn")
-  .addEventListener("click", () => {
+/* Music button */
 
-    startMusic();
+if (musicBtn) {
 
-    const letter =
-      document.getElementById("surpriseLetter");
+musicBtn.addEventListener("click", () => {
 
-    letter.classList.add("show");
+```
+if (music.paused) {
 
-    setTimeout(() => {
-      letter.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    }, 200);
+  startMusic();
 
-  }); {
+} else {
 
-    startMusic();
+  music.pause();
 
-    document
-      .getElementById("story")
-      .scrollIntoView({
-        behavior: "smooth"
-      });
+  musicBtn.textContent = "♪";
 
-  });
+}
+```
 
+});
+
+}
 
 /* =========================
-   CAKE
+OPEN YOUR SURPRISE
+========================= */
+
+const surpriseBtn =
+document.getElementById("surpriseBtn");
+
+if (surpriseBtn) {
+
+surpriseBtn.addEventListener("click", () => {
+
+```
+/* Start music after user interaction */
+startMusic();
+
+
+/* Show letter if it exists */
+
+const letter =
+  document.getElementById("surpriseLetter");
+
+
+if (letter) {
+
+  letter.classList.add("show");
+
+  setTimeout(() => {
+
+    letter.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  }, 300);
+
+} else {
+
+  /* If letter doesn't exist,
+     go to story section */
+
+  const story =
+    document.getElementById("story");
+
+  if (story) {
+
+    story.scrollIntoView({
+      behavior: "smooth"
+    });
+
+  }
+
+}
+```
+
+});
+
+}
+
+/* =========================
+CAKE
 ========================= */
 
 const cakeBtn =
-  document.getElementById("cakeBtn");
+document.getElementById("cakeBtn");
 
 const cakeWrap =
-  document.getElementById("cakeWrap");
+document.getElementById("cakeWrap");
 
 const wish =
-  document.getElementById("wish");
+document.getElementById("wish");
 
 let cakeCut = false;
 
+if (cakeBtn && cakeWrap) {
 
 cakeBtn.addEventListener("click", () => {
 
-  if (cakeCut) return;
+```
+if (cakeCut) return;
 
-  cakeCut = true;
+cakeCut = true;
 
-  cakeWrap.classList.add("cut");
 
-  cakeBtn.textContent =
-    "Cake Cut! ❤️";
+/* Cake animation */
+
+cakeWrap.classList.add("cut");
+
+
+/* Button text */
+
+cakeBtn.textContent =
+  "Cake Cut! ❤️";
+
+
+/* Wish */
+
+if (wish) {
 
   wish.textContent =
     "Make a beautiful wish, Nadra… ❤️";
 
-  startMusic();
-
-  confetti();
-
-  setTimeout(() => {
-
-    moreHearts();
-
-  }, 800);
-
-});
-
-
-/* =========================
-   CONFETTI
-========================= */
-
-function confetti() {
-
-  const symbols = [
-    "💖",
-    "✨",
-    "🎉",
-    "💕",
-    "🌸",
-    "💗",
-    "🎊",
-    "❤️"
-  ];
-
-  for (let i = 0; i < 90; i++) {
-
-    const el =
-      document.createElement("div");
-
-    el.className = "heart";
-
-    el.textContent =
-      symbols[
-        Math.floor(
-          Math.random() * symbols.length
-        )
-      ];
-
-    el.style.left =
-      Math.random() * 100 + "vw";
-
-    el.style.fontSize =
-      12 + Math.random() * 25 + "px";
-
-    el.style.animationDuration =
-      3 + Math.random() * 5 + "s";
-
-    el.style.animationDelay =
-      Math.random() * .8 + "s";
-
-    document.body.appendChild(el);
-
-    setTimeout(() => {
-
-      el.remove();
-
-    }, 9000);
-
-  }
-
 }
+
+
+/* Music */
+
+startMusic();
+
+
+/* Confetti */
+
+confetti();
 
 
 /* Extra hearts */
 
-function moreHearts() {
+setTimeout(() => {
 
-  for (let i = 0; i < 25; i++) {
+  moreHearts();
 
-    const el =
-      document.createElement("div");
+}, 800);
+```
 
-    el.className = "heart";
-
-    el.textContent = "❤️";
-
-    el.style.left =
-      20 + Math.random() * 60 + "vw";
-
-    el.style.fontSize =
-      15 + Math.random() * 20 + "px";
-
-    el.style.animationDuration =
-      4 + Math.random() * 3 + "s";
-
-    document.body.appendChild(el);
-
-    setTimeout(() => {
-
-      el.remove();
-
-    }, 8000);
-
-  }
+});
 
 }
 
+/* =========================
+CONFETTI
+========================= */
+
+function confetti() {
+
+const symbols = [
+"💖",
+"✨",
+"🎉",
+"💕",
+"🌸",
+"💗",
+"🎊",
+"❤️"
+];
+
+for (let i = 0; i < 90; i++) {
+
+```
+const el =
+  document.createElement("div");
+
+
+el.className = "heart";
+
+
+el.textContent =
+  symbols[
+    Math.floor(
+      Math.random() * symbols.length
+    )
+  ];
+
+
+el.style.left =
+  Math.random() * 100 + "vw";
+
+
+el.style.fontSize =
+  12 + Math.random() * 25 + "px";
+
+
+el.style.animationDuration =
+  3 + Math.random() * 5 + "s";
+
+
+el.style.animationDelay =
+  Math.random() * 0.8 + "s";
+
+
+document.body.appendChild(el);
+
+
+setTimeout(() => {
+
+  el.remove();
+
+}, 9000);
+```
+
+}
+
+}
 
 /* =========================
-   FLOATING HEARTS
+EXTRA HEARTS
+========================= */
+
+function moreHearts() {
+
+for (let i = 0; i < 25; i++) {
+
+```
+const el =
+  document.createElement("div");
+
+
+el.className = "heart";
+
+
+el.textContent = "❤️";
+
+
+el.style.left =
+  20 + Math.random() * 60 + "vw";
+
+
+el.style.fontSize =
+  15 + Math.random() * 20 + "px";
+
+
+el.style.animationDuration =
+  4 + Math.random() * 3 + "s";
+
+
+document.body.appendChild(el);
+
+
+setTimeout(() => {
+
+  el.remove();
+
+}, 8000);
+```
+
+}
+
+}
+
+/* =========================
+FLOATING HEARTS
 ========================= */
 
 setInterval(() => {
 
-  const el =
-    document.createElement("div");
+const el =
+document.createElement("div");
 
-  el.className = "heart";
+el.className = "heart";
 
-  el.textContent =
-    ["♥", "♡", "✦"][
-      Math.floor(
-        Math.random() * 3
-      )
-    ];
+el.textContent =
+["♥", "♡", "✦"][
+Math.floor(
+Math.random() * 3
+)
+];
 
-  el.style.left =
-    Math.random() * 100 + "vw";
+el.style.left =
+Math.random() * 100 + "vw";
 
-  el.style.color =
-    "#ff8fbe";
+el.style.color =
+"#ff8fbe";
 
-  el.style.fontSize =
-    12 + Math.random() * 15 + "px";
+el.style.fontSize =
+12 + Math.random() * 15 + "px";
 
-  el.style.animationDuration =
-    5 + Math.random() * 4 + "s";
+el.style.animationDuration =
+5 + Math.random() * 4 + "s";
 
-  document.body.appendChild(el);
+document.body.appendChild(el);
 
-  setTimeout(() => {
+setTimeout(() => {
 
-    el.remove();
+```
+el.remove();
+```
 
-  }, 9000);
+}, 9000);
 
 }, 900);
 
-
 /* =========================
-   TOUCH SWIPE
+TOUCH SWIPE
 ========================= */
 
 let touchStartX = 0;
 let touchEndX = 0;
 
-const slideFrame =
-  document.getElementById("slideFrame");
-
+if (slideFrame) {
 
 slideFrame.addEventListener(
-  "touchstart",
-  (e) => {
+"touchstart",
+(e) => {
 
-    touchStartX =
-      e.changedTouches[0].screenX;
+```
+  touchStartX =
+    e.changedTouches[0].screenX;
 
-  },
-  { passive: true }
+},
+{ passive: true }
+```
+
 );
 
-
 slideFrame.addEventListener(
-  "touchend",
-  (e) => {
+"touchend",
+(e) => {
 
-    touchEndX =
-      e.changedTouches[0].screenX;
+```
+  touchEndX =
+    e.changedTouches[0].screenX;
 
-    const distance =
-      touchEndX - touchStartX;
 
-    if (Math.abs(distance) > 50) {
+  const distance =
+    touchEndX - touchStartX;
 
-      if (distance < 0) {
 
-        nextSlide();
+  if (Math.abs(distance) > 50) {
 
-      } else {
+    if (distance < 0) {
 
-        previousSlide();
+      nextSlide();
 
-      }
+    } else {
 
-      restartSlideshow();
+      previousSlide();
 
     }
-     const music = document.getElementById('bgMusic');
-document.addEventListener('click', () => {
-  if (music && music.paused) {
-    music.play().catch(e => console.log(e));
-  }
-}, { once: true });
 
-  },
-  { passive: true }
+    restartSlideshow();
+
+  }
+
+},
+{ passive: true }
+```
+
+);
+
+}
+
+/* =========================
+MOBILE / FIRST INTERACTION
+MUSIC BACKUP
+========================= */
+
+document.addEventListener(
+"click",
+() => {
+
+```
+if (
+  music &&
+  music.paused
+) {
+
+  /* Don't force autoplay.
+     Browser will allow it after
+     user interaction. */
+
+}
+```
+
+},
+{ once: true }
 );
