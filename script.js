@@ -432,6 +432,12 @@ slideFrame.addEventListener(
       restartSlideshow();
 
     }
+     const music = document.getElementById('bgMusic');
+document.addEventListener('click', () => {
+  if (music && music.paused) {
+    music.play().catch(e => console.log(e));
+  }
+}, { once: true });
 
   },
   { passive: true }
