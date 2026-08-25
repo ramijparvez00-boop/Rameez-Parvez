@@ -147,27 +147,20 @@ const musicBtn =
 
 let musicStarted = false;
 
-
 async function startMusic() {
-
   try {
+    music.currentTime = 0;
+    music.volume = 1;
 
     await music.play();
 
     musicStarted = true;
-
     musicBtn.textContent = "❚❚";
-
   } catch (error) {
-
-    console.log(
-      "Music needs user interaction."
-    );
-
+    console.error("Music error:", error);
+    alert("Music play nahi ho pa raha. Please check song.mp3 file.");
   }
-
 }
-
 
 function toggleMusic() {
 
