@@ -661,3 +661,71 @@ h2 {
     transform: scale(.85);
   }
 }
+.surprise-letter {
+  display: none;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 90px 7%;
+  text-align: center;
+  animation: letterReveal 1.5s ease forwards;
+}
+
+.surprise-letter.show {
+  display: block;
+}
+
+.letter-content {
+  margin-top: 35px;
+  padding: 40px;
+  text-align: left;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 25px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+}
+
+.letter-content p {
+  color: #d5c7d3;
+  font-size: 15px;
+  line-height: 2;
+  margin: 0 0 25px;
+}
+
+.letter-content strong {
+  color: #ff9dcc;
+}
+
+.signature {
+  text-align: right !important;
+  font-family: "Great Vibes", cursive;
+  font-size: 30px !important;
+  color: #ff9dcc !important;
+}
+
+@keyframes letterReveal {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .surprise-letter {
+    padding: 70px 5%;
+  }
+
+  .letter-content {
+    padding: 25px;
+  }
+
+  .letter-content p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+}
